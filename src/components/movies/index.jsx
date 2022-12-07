@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { ContentWrapper, PageHeader, MiniHeader, SpeedDialButton } from '../common'
 import { useFormik, Field, Form } from 'formik';
 import * as Yup from 'yup';
+import { useForm } from "react-hook-form";
+
 
 const AddMovieContainer = styled.form`
     background-color: red;
@@ -24,9 +26,16 @@ const NewMovieDetais = styled.div`
     }
 `;
 
-// const NewMovieDetais = styled.input`
-//     background-color: red;
-// `;
+const Detailsfield = styled.div`
+    display: grid;
+
+    background-color: orange;
+
+    span {
+        text-align: end;
+        background-color: green;
+    }
+`;
 
 const AddMovieButton = styled.button`
     height: 25px;
@@ -65,88 +74,76 @@ export default function Movies(props) {
     const movies = [{ name: 'abc', },
     { name: 'abc', }, { name: 'abc', }, { name: 'abc', }, { name: 'abc', }, { name: 'abc', }, { name: 'abc', }, { name: 'abc', },
     ]
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+        mode: "all"
+      });
+    const onSubmit = (data) => {
+        console.log("🚀 ~ file: index.jsx:72 ~ onSubmit ~ data", data)
 
-    const formik = useFormik({
-        initialValues: {
-            name: "",
-            desc: "",
-            cast: "",
-            picture: "",
-        },
-        validationSchema: Yup.object ({
-            name: Yup.string()
-            .trim()
-            .required('Movie name is required'),
-            desc: Yup.string()
-            .trim()
-            .required('Movie description is required'),
-            cast: Yup.string()
-            .trim()
-            .required('Movie cast is required'),
-            picture: Yup.string()
-            .trim()
-            .matches(
-                /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-                'Enter correct url!'
-            )
-            .required('Movie Cover Image URL is required'),
-        }),
-        onSubmit: (value) => {
-            console.log(value)
-            return fetch('mongodb://localhost:27017/cineplex.movies', {
-                method: 'POST',
-                body: JSON.stringify(value),
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(res => res.json())
-            .then(data => console.log(data)); 
-        },
-        handleChange: (value) => {
-            console.log("someing")
-        }
+    }
+    const onErrors = errors => console.log(errors);
 
-    })
-    console.log(formik.values)
+
 
     return <ContentWrapper>
         <PageHeader>Movies</PageHeader>
-        {addMovieContainer && <AddMovieContainer onSubmit={formik.handleSubmit}>
+        {addMovieContainer && <AddMovieContainer onSubmit={handleSubmit(onSubmit, onErrors)}>
             <MiniHeader>Add a new movie</MiniHeader>
             <NewMovieDetais>
-                <input 
-                    name="name" 
-                    type="text" 
-                    placeholder="Movie Name" 
-                    values={formik.values.name}
-                    onChange={formik.handleChange}
-                />
-                <input 
-                    name="desc" 
-                    type="text" 
-                    placeholder="Movie Description" 
-                    values={formik.values.desc}
-                    onChange={formik.handleChange}
-                />
-                <input 
-                    name="cast" 
-                    type="text" 
-                    placeholder="Movie cast" 
-                    values={formik.values.cast}
-                    onChange={formik.handleChange}
-                />
-                <input 
-                    name="picture" 
-                    type="text" 
-                    placeholder="Cover Image URL" 
-                    values={formik.values.picture}
-                    onChange={formik.handleChange}
-                />
+                <Detailsfield>
+                    <label>Add Movie Name</label>
+                    <input
+                        name="name"
+                        type="text"
+                        {...register("name", {
+                            validate: value => value.trim() !== "" || "Please Enter a Movie Name"
+                        })}
+                    />
+                    {errors.name && <span>{errors.name.message}</span>}
+                </Detailsfield>
+                <Detailsfield>
+                    <label>Add Movie description</label>
+                    <input
+                        name="desc"
+                        type="text"
+                        {...register("desc", {
+                            validate: value => value.trim() !== "" || "Please Enter a Movie description"
+                        })}
+                    />
+                    {errors.desc && <span>{errors.desc.message}</span>}
+                </Detailsfield>
+                <Detailsfield>
+                    <label>Add Casts</label>
+                    <input
+                        name="cast"
+                        type="text"
+                        {...register("cast", {
+                            validate: value => value.trim() !== "" || "Please Enter Cast of the Movie"
+                        })}
+                    />
+                    {errors.cast && <span>{errors.cast.message}</span>}
+                </Detailsfield>
+                <Detailsfield>
+                    <label>Add Cover Image URL</label>
+                    <input
+                        name="pictureURL"
+                        type="text"
+                        {...register("pictureURL", {
+                            pattern: { 
+                                value: "https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+                                , 
+                                message: "Please Enter Movie Cover URL"
+                            }
+                        })}
+                    />
+                    {errors.pictureURL && <span>{errors.pictureURL.message}</span>}
+                </Detailsfield>
             </NewMovieDetais>
             <AddMovieButton type="submit">Add Movie</AddMovieButton>
         </AddMovieContainer>}
-            <MiniHeader>Current Movies</MiniHeader>
+        <pre>{JSON.stringify(watch(), null, 2)}</pre>
+        {/* <pre>{JSON.stringify(errors, null, 2)}</pre> */}
+        <MiniHeader>Current Movies</MiniHeader>
         <CurrentMovieList>
             <CurrentMovie>{'movie.name'}</CurrentMovie>
             <CurrentMovie>{'movie.name'}</CurrentMovie>
@@ -161,9 +158,10 @@ export default function Movies(props) {
         </CurrentMovieList>
         <SpeedDialButton onClick={() => {
             setAddMovieContainer(!addMovieContainer)
-            formik.handleReset()
+            console.log(watch("example"));
+
         }}>+</SpeedDialButton>
     </ContentWrapper>
 }
 
-// name, cast, img, desc
+// name, cast, img, desc===
