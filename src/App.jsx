@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Sidebar from './components/sidebar'
 import Menu from './components/movies'
 import Screens from './components/screens'
 import Bookings from './components/bookings'

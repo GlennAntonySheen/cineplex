@@ -23,10 +23,24 @@ export const MiniHeader = styled.h1`
 export const SpeedDialButton = styled.button`
     height: 60px;
     width: 60px;
-    position: absolute;
+    position: fixed;
     right: 40px;
     bottom: 40px;
     border: none;
     border-radius: 100%;
-    background-color: orange;
+    font-size: 2px;
+    color: #151D3B;
+  transition: all 1s;
+    background-color: #db0000;
+
+    &: hover {
+        svg {
+  transition: all .4s ;
+            height: 45px;        
+        }
+    }
+    
+    svg {
+        height: 40px;        
+    }
 `;
