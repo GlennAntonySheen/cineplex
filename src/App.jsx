@@ -1,26 +1,28 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Menu from './components/movies'
+import Sidebar from './components/sidebar'
+import Movies from './components/movies'
 import Screens from './components/screens'
 import Bookings from './components/bookings'
 
 const ContentWrapper = styled.div`
 	padding: 1rem;
 	display: grid;
-	/* grid-template: 1fr / auto 1fr; */
+	grid-template: 1fr / auto 1fr;
 	grid-gap: 1rem;
 	box-sizing: border-box;
-	background-color: blue;
+	/* background-color: #151D3B; */
+	background-color: #fff;
 `;
 
 function App() {
-	const [currentPage, setCurrentPage] = useState('movies')
+	const [currentPage, setCurrentPage] = useState('Movies')
 
 	return <ContentWrapper>
-		{/* <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} /> */}
-		{ currentPage === 'movies' && <Menu /> }
-		{ currentPage === 'screens' && <Screens /> }
-		{ currentPage === 'booking' && <Bookings /> }
+		<Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+		{ currentPage === 'Movies' && <Movies /> }
+		{ currentPage === 'Screens' && <Screens /> }
+		{ currentPage === 'Booking' && <Bookings /> }
 	</ContentWrapper>
 }
 

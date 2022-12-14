@@ -1,19 +1,24 @@
 import styled from 'styled-components'
 
 export const ContentWrapper = styled.div`
-    background-color: #3e3e3e;
+    margin-left: calc(200px + 2rem);
+    border-radius: 1rem;
+    background-color: #fdfdc4;
+    /* background-color: green; */
 `;
 
 export const PageHeader = styled.h1`
     padding: 1rem;
     font-size: 3.5rem;
-    background-color: #9aee5e;
+    border-radius: 1rem;
+    background-color: #fff;
 `;
 
 export const MiniHeader = styled.h1`
     padding: 1rem;
-    font-size: 1.5rem;
-    background-color: #0085be;
+    font-size: 3.5rem;
+    color: #fff;
+    background-color: transparent;
 `;
 
 
@@ -30,12 +35,12 @@ export const SpeedDialButton = styled.button`
     border-radius: 100%;
     font-size: 2px;
     color: #151D3B;
-  transition: all 1s;
-    background-color: #db0000;
+    transition: all 1s;
+    background-color: #fff;
 
     &: hover {
         svg {
-  transition: all .4s ;
+            transition: all .4s ;
             height: 45px;        
         }
     }

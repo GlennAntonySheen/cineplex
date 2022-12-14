@@ -1,7 +1,8 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { ContentWrapper, PageHeader, MiniHeader, SpeedDialButton } from '../common'
-import axios from 'axios'
+import { ContentWrapper, MiniHeader, SpeedDialButton } from '../common'
 import { useForm } from "react-hook-form";
 import MoviesModel from '../../model/movies.js'
 import { VisibilityOff } from '@styled-icons/material-rounded/VisibilityOff'
@@ -9,43 +10,59 @@ import { TextBulletListSquareEdit } from '@styled-icons/fluentui-system-regular/
 import { FormNew } from '@styled-icons/fluentui-system-regular/FormNew'
 
 const AddMovieContainer = styled.form`
-    background-color: red;
+    /* margin: 1rem 2rem; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 1rem;
+    background-color: #151D3B;
 `;
 
 const NewMovieDetais = styled.div`
+    width: 100%;
     padding: 1rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 250px));
     justify-content: center;
     gap: 1rem 100px;
-    background-color: red;
-
-    input {
-        height: 25px;
-        padding-left: 1rem;
-        border: 0px;
-        border-radius: 2rem;
-    }
+    box-sizing: border-box;
+    /* background-color: red; */
 `;
 
 const Detailsfield = styled.div`
     display: grid;
+    gap: .2rem;
+    /* background-color: orange; */
 
-    background-color: orange;
+    label {         
+        padding-left: 1rem;
+        color: #fff;
+    }
+
+    input {
+        height: 35px;
+        padding-left: 1rem;
+        border: 1px solid #db0000;
+        /* outline: 15px red; */
+        border-radius: 1rem;
+    }
 
     span {
-        text-align: end;
-        background-color: green;
+        padding-left: 1rem;
+        /* text-align: end; */
+        color: #db0000;
     }
 `;
 
 const AddMovieButton = styled.button`
-    height: 25px;
-    width: 400px;
-    display: grid;
-    margin: 0 auto;
+    /* height: 25px; */
+    width: fit-content;
+    padding: .5rem 1rem;
+    margin-bottom: 1rem;
     border: none;
     border-radius: 2rem;
+    font-size: 1.1rem;
+    color: #fff;
     background-color: red;
 `;
 
@@ -58,13 +75,12 @@ const CurrentMovieList = styled.div`
     justify-content: space-between;
     transition-delay: 2.5s;
     transition: 2.9s;
-    background-color: #151D3B;
+    /* background-color: #db0000; */
 `;
 
 const CurrentMovie = styled.div`
     height: 350px;
     width: 230px;    
-        /* width: 300px; */
     margin: 1rem 2rem;
     overflow: hidden;
     display: flex;
@@ -72,7 +88,7 @@ const CurrentMovie = styled.div`
     transition-delay: .2s;
     box-sizing: border-box;
     border-radius: 1rem;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     background-color: #fff;
 
     &:hover {
@@ -117,38 +133,38 @@ const MovieActionWrapper = styled.div`
 export default function Movies(props) {
     const [addMovieContainer, setAddMovieContainer] = useState(false)
     const [movies, setMovies] = useState([])
-    const [hoverOnMovie, setHoverOnMovie] = useState(false)
-    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
         mode: "all"
     });
     const moviesModel = new MoviesModel();
-    const onSubmit = (data) => {
-        moviesModel.addNewMovie(data)
+    
+    const onSubmit = async (data) => {
+        await moviesModel.addNewMovie(data)
         reset()
+        setAddMovieContainer(false)
+        getActiveMovies()
     }
+
     const onErrors = errors => console.log(errors);
 
-    const getAllMovies = () => {
-        axios.get('http://localhost:4000/movies').then((response) => {
-            console.log(response.data)
-            setMovies(response.data)
-        }).catch((error) => {
-            console.log("🚀 ~ file: index.jsx:89 ~ axios.get ~ error", error)
-        })
+    const getActiveMovies = () => {
+        moviesModel.getAllMovie({ movie_status: 'active' }).then((response) => { setMovies(response) })
+    }
+
+    const changeMovieStatus = (id, newStatus) => {
+        moviesModel.changeStatus(id, 'inactive').then((response) => { 
+            getActiveMovies()
+         })
     }
 
     useEffect(() => {
-        getAllMovies()
+        getActiveMovies()
     }, [])
 
-    useEffect(() => {
-        console.log('first')
-    }, [hoverOnMovie])
-
     return <ContentWrapper>
-        <PageHeader>Movies</PageHeader>
         {addMovieContainer && <AddMovieContainer onSubmit={handleSubmit(onSubmit, onErrors)}>
-            <MiniHeader>Add a new movie</MiniHeader>
+        {/* <PageHeader>Movies</PageHeader> */}
+            <MiniHeader>Add A New Movie</MiniHeader>
             <NewMovieDetais>
                 <Detailsfield>
                     <label>Add Movie Name</label>
@@ -199,20 +215,20 @@ export default function Movies(props) {
                     {errors.movie_picture_URL && <span>{errors.movie_picture_URL.message}</span>}
                 </Detailsfield>
             </NewMovieDetais>
-            <AddMovieButton type="submit">Add Movie</AddMovieButton>
+                <AddMovieButton type="submit">Add Movie</AddMovieButton>
         </AddMovieContainer>}
-        <MiniHeader>Current Movies</MiniHeader>
-        <CurrentMovieList hoverOnMovie={hoverOnMovie}>
+        {/* <MiniHeader>Current Movies</MiniHeader> */}
+        <CurrentMovieList>
             {movies.map((movie, index) => {
+                // console.log("🚀 ~ file: index.jsx:232 ~ Movies ~ movie", movie._id)
                 return <CurrentMovie
                     key={index}
-                    onMouseEnter={() => setHoverOnMovie(true)}
-                    onMouseLeave={() => setHoverOnMovie(false)}
-                    
                 >
-                    <img src={movie.movie_picture_URL} />
+                    <img src={movie.movie_picture_URL} alt="movie Poster"/>
                     <MovieActionWrapper>
-                        <button><VisibilityOff /></button>
+                        <button onClick={() => {
+                            changeMovieStatus(movie._id, 'inactive')
+                        }}><VisibilityOff /></button>
                         <button><TextBulletListSquareEdit /></button>
                     </MovieActionWrapper>
                 </CurrentMovie>
@@ -220,10 +236,6 @@ export default function Movies(props) {
         </CurrentMovieList>
         <SpeedDialButton onClick={() => {
             setAddMovieContainer(!addMovieContainer)
-            console.log(watch("example"));
-
         }}><FormNew /></SpeedDialButton>
     </ContentWrapper>
 }
-
-// name, cast, img, desc===

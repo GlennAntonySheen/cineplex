@@ -1,20 +1,19 @@
 import axios from 'axios'
 
 export default class MoviesModel {
-    addNewMovie(movieDetails) {
-        console.log("🚀 ~ file: movies.js:7 ~ MoviesModel ~ addNewMovie ~ movieDetails", movieDetails)
-        axios.post('http://localhost:4000/movies/addNewMovie', movieDetails).then((response) => {
-            console.log(response);
-          }, (error) => {
-            console.log(error);
-          });
-    }
+	async addNewMovie(movieDetails) {
+		const res = await axios.post('http://localhost:4000/movies/addNewMovie', movieDetails)
+		return res
+	}
 
-    getAllMovie() {
-        axios.get('http://localhost:4000/movies/').then((response) => {
-            console.log(response);
-          }, (error) => {
-            console.log(error);
-          });
-    }
+	async getAllMovie() {
+		const allMovies = await axios.get('http://localhost:4000/movies/')
+		return allMovies.data
+	}
+
+	async changeStatus(id, newStatus) {
+		console.log("🚀 ~ file: movies.js:22 ~ MoviesModel ~ changeStatus ~ id, newStatus", id, newStatus)
+		const res = await axios.patch('http://localhost:4000/movies/changeStatus', { id, newStatus })
+		return res
+	}
 }
