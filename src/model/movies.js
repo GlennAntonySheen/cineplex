@@ -5,9 +5,10 @@ export default class MoviesModel {
 		const res = await axios.post('http://localhost:4000/movies/addNewMovie', movieDetails)
 		return res
 	}
-
+	
 	async getAllMovie() {
 		const allMovies = await axios.get('http://localhost:4000/movies/')
+		console.log("🚀 ~ file: movies.js:8 ~ MoviesModel ~ addNewMovie ~ res", allMovies)
 		return allMovies.data
 	}
 

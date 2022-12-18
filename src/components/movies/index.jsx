@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { ContentWrapper, MiniHeader, SpeedDialButton } from '../common'
@@ -148,7 +146,9 @@ export default function Movies(props) {
     const onErrors = errors => console.log(errors);
 
     const getActiveMovies = () => {
-        moviesModel.getAllMovie({ movie_status: 'active' }).then((response) => { setMovies(response) })
+        moviesModel.getAllMovie({ movie_status: 'active' }).then((response) => { 
+        console.log("🚀 ~ file: index.jsx:150 ~ getActiveMovies ~ response", response)
+        setMovies(response) })
     }
 
     const changeMovieStatus = (id, newStatus) => {

@@ -16,7 +16,7 @@ const ContentWrapper = styled.div`
 `;
 
 function App() {
-	const [currentPage, setCurrentPage] = useState('Movies')
+	const [currentPage, setCurrentPage] = useState('Screens')
 
 	return <ContentWrapper>
 		<Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
