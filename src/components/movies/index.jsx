@@ -67,7 +67,7 @@ const AddMovieButton = styled.button`
 const CurrentMovieList = styled.div`
     /* display: grid;
     grid-template-columns: repeat(auto-fill, 150px);*/
-    padding: 2rem; 
+    padding: 2rem 2rem 0; 
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -135,7 +135,7 @@ export default function Movies(props) {
         mode: "all"
     });
     const moviesModel = new MoviesModel();
-    
+
     const onSubmit = async (data) => {
         await moviesModel.addNewMovie(data)
         reset()
@@ -146,15 +146,16 @@ export default function Movies(props) {
     const onErrors = errors => console.log(errors);
 
     const getActiveMovies = () => {
-        moviesModel.getAllMovie({ movie_status: 'active' }).then((response) => { 
-        console.log("🚀 ~ file: index.jsx:150 ~ getActiveMovies ~ response", response)
-        setMovies(response) })
+        moviesModel.getAllMovie({ movie_status: 'active' }).then((response) => {
+            console.log("🚀 ~ file: index.jsx:150 ~ getActiveMovies ~ response", response)
+            setMovies(response)
+        })
     }
 
     const changeMovieStatus = (id, newStatus) => {
-        moviesModel.changeStatus(id, 'inactive').then((response) => { 
+        moviesModel.changeStatus(id, 'inactive').then((response) => {
             getActiveMovies()
-         })
+        })
     }
 
     useEffect(() => {
@@ -163,7 +164,7 @@ export default function Movies(props) {
 
     return <ContentWrapper>
         {addMovieContainer && <AddMovieContainer onSubmit={handleSubmit(onSubmit, onErrors)}>
-        {/* <PageHeader>Movies</PageHeader> */}
+            {/* <PageHeader>Movies</PageHeader> */}
             <MiniHeader>Add A New Movie</MiniHeader>
             <NewMovieDetais>
                 <Detailsfield>
@@ -215,16 +216,15 @@ export default function Movies(props) {
                     {errors.movie_picture_URL && <span>{errors.movie_picture_URL.message}</span>}
                 </Detailsfield>
             </NewMovieDetais>
-                <AddMovieButton type="submit">Add Movie</AddMovieButton>
+            <AddMovieButton type="submit">Add Movie</AddMovieButton>
         </AddMovieContainer>}
         {/* <MiniHeader>Current Movies</MiniHeader> */}
-        <CurrentMovieList>
+        {movies.length !== 0 ? <CurrentMovieList>
             {movies.map((movie, index) => {
-                // console.log("🚀 ~ file: index.jsx:232 ~ Movies ~ movie", movie._id)
                 return <CurrentMovie
                     key={index}
                 >
-                    <img src={movie.movie_picture_URL} alt="movie Poster"/>
+                    <img src={movie.movie_picture_URL} alt="movie Poster" />
                     <MovieActionWrapper>
                         <button onClick={() => {
                             changeMovieStatus(movie._id, 'inactive')
@@ -233,7 +233,7 @@ export default function Movies(props) {
                     </MovieActionWrapper>
                 </CurrentMovie>
             })}
-        </CurrentMovieList>
+        </CurrentMovieList> : <div>No movies found!</div>}
         <SpeedDialButton onClick={() => {
             setAddMovieContainer(!addMovieContainer)
         }}><FormNew /></SpeedDialButton>

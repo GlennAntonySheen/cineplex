@@ -82,6 +82,10 @@ export default function Sidebar(props) {
                 <ProjectionScreen size="30" />
                 <span>Screens</span>
             </Links>
+            <Links active={props.currentPage == 'shows'} onClick={() => props.setCurrentPage('Shows')} >
+                <ProjectionScreen size="30" />
+                <span>Shows</span>
+            </Links>
             <Links active={props.currentPage == 'Booking'} onClick={() => props.setCurrentPage('Booking')} >
                 <Ticket size="30" />
                 <span>Booking</span>

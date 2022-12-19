@@ -3,11 +3,9 @@ import styled from 'styled-components'
 import { ContentWrapper, MiniHeader, SpeedDialButton } from '../common'
 import { useForm } from "react-hook-form";
 import ScreensModel from '../../model/screens.js'
-import { VisibilityOff } from '@styled-icons/material-rounded/VisibilityOff'
-import { TextBulletListSquareEdit } from '@styled-icons/fluentui-system-regular/TextBulletListSquareEdit'
 import { FormNew } from '@styled-icons/fluentui-system-regular/FormNew'
 
-const AddMovieContainer = styled.form`
+const AddScreenContainer = styled.form`
     /* margin: 1rem 2rem; */
     display: flex;
     flex-direction: column;
@@ -16,7 +14,7 @@ const AddMovieContainer = styled.form`
     background-color: #151D3B;
 `;
 
-const NewMovieDetais = styled.div`
+const NewScreenDetais = styled.div`
     width: 100%;
     padding: 1rem;
     display: grid;
@@ -53,7 +51,6 @@ const Detailsfield = styled.div`
 `;
 
 const AddScreenButton = styled.button`
-    /* height: 25px; */
     width: fit-content;
     padding: .5rem 1rem;
     margin-bottom: 1rem;
@@ -64,67 +61,32 @@ const AddScreenButton = styled.button`
     background-color: red;
 `;
 
-const CurrentMovieList = styled.div`
-    /* display: grid;
-    grid-template-columns: repeat(auto-fill, 150px);*/
-    padding: 2rem; 
+const ScreenList = styled.div`
+    padding: 1rem; 
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    transition-delay: 2.5s;
-    transition: 2.9s;
+    flex-direction: column;
     /* background-color: #db0000; */
 `;
 
-const CurrentMovie = styled.div`
-    height: 350px;
-    width: 230px;    
-    margin: 1rem 2rem;
-    overflow: hidden;
-    display: flex;
-    transition: .4s;
-    transition-delay: .2s;
-    box-sizing: border-box;
-    border-radius: 1rem;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    background-color: #fff;
-
-    &:hover {
-        width: 300px;
-        margin: 1rem .1rem;
-    }
-
-    img {
-        height: 350px;
-        border-radius: 1rem;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        
-    }
-`;
-
-const MovieActionWrapper = styled.div`
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+const ScreenDetails = styled.div`
+    padding: .5rem;
+    margin-top: .5rem;
+    display: grid;
+    grid-template: 1fr / 100px 1fr;
+    grid-auto-flow: column;
     align-items: center;
+    box-sizing: border-box;
+    border-radius: .8rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
     button {
-        height: 40px;
-        width: 40px;
-        margin-top: 1.5rem;
+        padding: .4rem .6rem;
+        margin-right: 2rem;
         border: none;
-        border-radius: 100%;
-        transition: .1s;
-        color: #151D3B;
-        box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-        background-color: #fff;
-
-        &: hover {
-            cursor: pointer;
-            background-color: #db0000;
-        }
+        border-radius: 1rem;
+        color: white;
+        cursor: pointer;
+        background-color: ${props => props.active ? '#2ecc71' : '#EA2027'};
     }
 `;
 
@@ -136,34 +98,36 @@ export default function Screens(props) {
     });
     const screensModel = new ScreensModel();
 
-    const onSubmit = async (data) => {
-        console.log("🚀 ~ file: index.jsx:140 ~ onSubmit ~ data", data)
-        // await screensModel.addNewScreen(data)
-        reset()
-        setAddScreenContainer(false)
-        getActiveScreens()
+    const onSubmit = (data) => {
+        screensModel.addNewScreen(data).then(response => {
+            reset()
+            setAddScreenContainer(false)
+            getAllScreens()
+        })
     }
 
     const onErrors = errors => console.log(errors);
 
-    const getActiveScreens = () => {
-        // screensModel.getAllMovie({ movie_status: 'active' }).then((response) => { setScreens(response) })
+    const getAllScreens = () => {
+        screensModel.getAllScreens().then((response) => {
+            setScreens(response)
+        })
     }
 
-    const changeMovieStatus = (id, newStatus) => {
-        // screensModel.changeStatus(id, 'inactive').then((response) => { 
-        //     getActiveScreens()
-        //  })
+    const changeScreenStatus = (id, newStatus) => {
+        screensModel.changeStatus(id, newStatus).then((response) => { 
+            getAllScreens()
+         })
     }
 
     useEffect(() => {
-        getActiveScreens()
+        getAllScreens()
     }, [])
 
     return <ContentWrapper>
-        {addScreenContainer && <AddMovieContainer onSubmit={handleSubmit(onSubmit, onErrors)}>
+        {addScreenContainer && <AddScreenContainer onSubmit={handleSubmit(onSubmit, onErrors)}>
             <MiniHeader>Add A New Screen</MiniHeader>
-            <NewMovieDetais>
+            <NewScreenDetais>
                 <Detailsfield>
                     <label>Add Screen Name</label>
                     <input
@@ -175,25 +139,23 @@ export default function Screens(props) {
                     />
                     {errors.screen_name && <span>{errors.screen_name.message}</span>}
                 </Detailsfield>
-            </NewMovieDetais>
+            </NewScreenDetais>
             <AddScreenButton type="submit">Add Movie</AddScreenButton>
-        </AddMovieContainer>}
-        <CurrentMovieList>
-            {screens.map((movie, index) => {
-                // console.log("🚀 ~ file: index.jsx:232 ~ Movies ~ movie", movie._id)
-                return <CurrentMovie
+        </AddScreenContainer>}
+        {/* <div>{JSON.stringify(screens)}</div> */}
+        <ScreenList>
+            {screens.map((screen, index) => {
+                return <ScreenDetails
                     key={index}
+                    active={screen.screen_status === 'active'}
                 >
-                    <img src={movie.movie_picture_URL} alt="movie Poster" />
-                    <MovieActionWrapper>
-                        <button onClick={() => {
-                            changeMovieStatus(movie._id, 'inactive')
-                        }}><VisibilityOff /></button>
-                        <button><TextBulletListSquareEdit /></button>
-                    </MovieActionWrapper>
-                </CurrentMovie>
+                    <button onClick={() => {
+                        changeScreenStatus(screen._id, screen.screen_status === 'active' ? 'inactive' : 'active')
+                    }}>{screen.screen_status}</button>
+                    {`Screen Name: ${screen.screen_name}`}
+                </ScreenDetails>
             })}
-        </CurrentMovieList>
+        </ScreenList>
         <SpeedDialButton onClick={() => {
             setAddScreenContainer(!addScreenContainer)
         }}><FormNew /></SpeedDialButton>

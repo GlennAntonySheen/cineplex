@@ -1,9 +1,10 @@
 import styled from 'styled-components'
 
 export const ContentWrapper = styled.div`
-    margin-left: calc(200px + 2rem);
+    width: 100%;
+    margin-left: calc(200px + 1rem);
     border-radius: 1rem;
-    background-color: #fdfdc4;
+    /* background-color: #dede00; */
     /* background-color: green; */
 `;
 

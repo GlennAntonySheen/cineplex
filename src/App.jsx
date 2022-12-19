@@ -3,16 +3,15 @@ import styled from 'styled-components'
 import Sidebar from './components/sidebar'
 import Movies from './components/movies'
 import Screens from './components/screens'
+import Shows from './components/shows'
 import Bookings from './components/bookings'
 
 const ContentWrapper = styled.div`
 	padding: 1rem;
-	display: grid;
-	grid-template: 1fr / auto 1fr;
-	grid-gap: 1rem;
+	display: flex;
 	box-sizing: border-box;
 	/* background-color: #151D3B; */
-	background-color: #fff;
+	/* background-color: #d80e0e; */
 `;
 
 function App() {
@@ -22,6 +21,7 @@ function App() {
 		<Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
 		{ currentPage === 'Movies' && <Movies /> }
 		{ currentPage === 'Screens' && <Screens /> }
+		{ currentPage === 'Shows' && <Shows /> }
 		{ currentPage === 'Booking' && <Bookings /> }
 	</ContentWrapper>
 }
