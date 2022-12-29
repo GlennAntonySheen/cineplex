@@ -1,19 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from "react-router-dom";
 import { MoviesAndTv } from '@styled-icons/fluentui-system-filled/MoviesAndTv'
 import { Ticket } from '@styled-icons/ionicons-outline/Ticket'
+import { Slideshow } from '@styled-icons/boxicons-regular/Slideshow'
 import { ProjectionScreen } from '@styled-icons/fluentui-system-regular/ProjectionScreen'
 
 const SidebarWrapper = styled.div`
     height: calc(100vh - 2rem);
-    width: 200px;
-    position: fixed;
+    width: 300px;
+    /* position: fixed; */
     display: grid;
     grid-template: auto auto auto / 1fr;
     align-content: space-between;
     border-radius: 1rem;
     overflow: hidden;
-    background-color: #0071ce;
+    background-color: #DA0037;
 `;
 
 const NavHeader = styled.h1`
@@ -23,9 +25,9 @@ const NavHeader = styled.h1`
     font-size: 2rem;
     font-weight: semi;
     text-align: center;
-    color: #fff;
+    color: #DA0037;
     border-radius: 1rem;
-    background-color: #ffc220;
+    background-color: #EDEDED;
 `;
 
 const LinksContainer = styled.ul`
@@ -35,7 +37,7 @@ const LinksContainer = styled.ul`
     grid-gap: 1rem;
 `;
 
-const Links = styled.li`
+const Links = styled(Link)`
     height: 40px;
     display: grid;
     grid-auto-flow: column;
@@ -45,14 +47,15 @@ const Links = styled.li`
     border-radius: .6rem;
     /* grid-template: 1fr / auto 1fr; */
     transition: .5s;
-    color: #ffc220;
+    color: #EDEDED;
         /* background-color: ${props => props.active ? '#db0000' : '##E6E6E6'}; */
         /* background-color: #E6E6E6; */
 
 
     :hover {
         cursor: pointer;
-        background-color: #fff;
+        color: #DA0037;
+        background-color: #EDEDED;
     }
 
     span {
@@ -74,19 +77,19 @@ export default function Sidebar(props) {
     return <SidebarWrapper>
         <NavHeader>{`${props.currentPage}`}</NavHeader>
         <LinksContainer>
-            <Links active={props.currentPage == 'Movies'} onClick={() => props.setCurrentPage('Movies')}>
+            <Links to={`movies`} active={props.currentPage == 'Movies'} onClick={() => props.setCurrentPage('Movies')} >
                 <MoviesAndTv size="30" />
                 <span>Movies</span>
-            </Links>
-            <Links active={props.currentPage == 'Screens'} onClick={() => props.setCurrentPage('Screens')} >
+            </Links> 
+            <Links to={'screens'} active={props.currentPage == 'Screens'} onClick={() => props.setCurrentPage('Screens')} >
                 <ProjectionScreen size="30" />
                 <span>Screens</span>
             </Links>
-            <Links active={props.currentPage == 'shows'} onClick={() => props.setCurrentPage('Shows')} >
-                <ProjectionScreen size="30" />
+            <Links to={'shows'} active={props.currentPage == 'shows'} onClick={() => props.setCurrentPage('Shows')} >
+                <Slideshow size="30" />
                 <span>Shows</span>
             </Links>
-            <Links active={props.currentPage == 'Booking'} onClick={() => props.setCurrentPage('Booking')} >
+            <Links to={'booking'} active={props.currentPage == 'Booking'} onClick={() => props.setCurrentPage('Booking')} >
                 <Ticket size="30" />
                 <span>Booking</span>
             </Links>

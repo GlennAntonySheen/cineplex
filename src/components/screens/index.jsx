@@ -109,7 +109,7 @@ export default function Screens(props) {
     const onErrors = errors => console.log(errors);
 
     const getAllScreens = () => {
-        screensModel.getAllScreens().then((response) => {
+        screensModel.getScreens().then((response) => {
             setScreens(response)
         })
     }
@@ -142,7 +142,6 @@ export default function Screens(props) {
             </NewScreenDetais>
             <AddScreenButton type="submit">Add Movie</AddScreenButton>
         </AddScreenContainer>}
-        {/* <div>{JSON.stringify(screens)}</div> */}
         <ScreenList>
             {screens.map((screen, index) => {
                 return <ScreenDetails

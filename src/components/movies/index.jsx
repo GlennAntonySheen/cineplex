@@ -67,7 +67,7 @@ const AddMovieButton = styled.button`
 const CurrentMovieList = styled.div`
     /* display: grid;
     grid-template-columns: repeat(auto-fill, 150px);*/
-    padding: 2rem 2rem 0; 
+    /* padding: 0 2rem;  */
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -130,7 +130,7 @@ const MovieActionWrapper = styled.div`
 
 export default function Movies(props) {
     const [addMovieContainer, setAddMovieContainer] = useState(false)
-    const [movies, setMovies] = useState([])
+    const [movies, setMovies] = useState(null)
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         mode: "all"
     });
@@ -147,7 +147,6 @@ export default function Movies(props) {
 
     const getActiveMovies = () => {
         moviesModel.getAllMovie({ movie_status: 'active' }).then((response) => {
-            console.log("🚀 ~ file: index.jsx:150 ~ getActiveMovies ~ response", response)
             setMovies(response)
         })
     }
@@ -219,21 +218,27 @@ export default function Movies(props) {
             <AddMovieButton type="submit">Add Movie</AddMovieButton>
         </AddMovieContainer>}
         {/* <MiniHeader>Current Movies</MiniHeader> */}
-        {movies.length !== 0 ? <CurrentMovieList>
-            {movies.map((movie, index) => {
-                return <CurrentMovie
-                    key={index}
-                >
-                    <img src={movie.movie_picture_URL} alt="movie Poster" />
-                    <MovieActionWrapper>
-                        <button onClick={() => {
-                            changeMovieStatus(movie._id, 'inactive')
-                        }}><VisibilityOff /></button>
-                        <button><TextBulletListSquareEdit /></button>
-                    </MovieActionWrapper>
-                </CurrentMovie>
-            })}
-        </CurrentMovieList> : <div>No movies found!</div>}
+
+        {movies !== null ?
+            movies.length !== 0 ?
+                <CurrentMovieList>
+                    {movies?.map((movie, index) => {
+                        return <CurrentMovie
+                            key={index}
+                        >
+                            <img src={movie.movie_picture_URL} alt="movie Poster" />
+                            <MovieActionWrapper>
+                                <button onClick={() => {
+                                    changeMovieStatus(movie._id, 'inactive')
+                                }}><VisibilityOff /></button>
+                                <button><TextBulletListSquareEdit /></button>
+                            </MovieActionWrapper>
+                        </CurrentMovie>
+                    })}
+                </CurrentMovieList>
+                : <div>No movies found!</div>
+            : <div>Loading...</div>
+        }
         <SpeedDialButton onClick={() => {
             setAddMovieContainer(!addMovieContainer)
         }}><FormNew /></SpeedDialButton>

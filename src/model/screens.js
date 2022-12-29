@@ -6,7 +6,7 @@ export default class ScreensModel {
 		return res
 	}
 
-	async getAllScreens(filter = {}) {
+	async getScreens(filter = {}) {
 		const screens = await axios.post('http://localhost:4000/screens/getScreens', filter)
 		return screens.data
 	}

@@ -2,9 +2,9 @@ import styled from 'styled-components'
 
 export const ContentWrapper = styled.div`
     width: 100%;
-    margin-left: calc(200px + 1rem);
+    /* margin-left: calc(200px + 1rem); */
     border-radius: 1rem;
-    /* background-color: #dede00; */
+    /* background-color: #303841; */
     /* background-color: green; */
 `;
 
@@ -18,7 +18,7 @@ export const PageHeader = styled.h1`
 export const MiniHeader = styled.h1`
     padding: 1rem;
     font-size: 3.5rem;
-    color: #fff;
+    color: #DA0037;
     background-color: transparent;
 `;
 

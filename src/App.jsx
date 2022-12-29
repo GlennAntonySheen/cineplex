@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { createBrowserRouter, RouterProvider, Router, Routes, Route } from "react-router-dom";
 import styled from 'styled-components'
 import Sidebar from './components/sidebar'
 import Movies from './components/movies'
@@ -7,22 +8,26 @@ import Shows from './components/shows'
 import Bookings from './components/bookings'
 
 const ContentWrapper = styled.div`
+	min-height: 100vh;
 	padding: 1rem;
 	display: flex;
 	box-sizing: border-box;
-	/* background-color: #151D3B; */
-	/* background-color: #d80e0e; */
+	background-color: #fff;
+	/* background-color: #171717; */
 `;
 
 function App() {
-	const [currentPage, setCurrentPage] = useState('Screens')
-
+	const [currentPage, setCurrentPage] = useState('Shows')
+	
 	return <ContentWrapper>
 		<Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-		{ currentPage === 'Movies' && <Movies /> }
-		{ currentPage === 'Screens' && <Screens /> }
-		{ currentPage === 'Shows' && <Shows /> }
-		{ currentPage === 'Booking' && <Bookings /> }
+		<Routes>
+			<Route path='/' element={<div>Hello world!</div>} />
+			<Route path='/movies' element={<Movies />} />
+			<Route path='/screens' element={<Screens />} />
+			<Route path='/shows' element={<Shows />} />
+			<Route path='/booking' element={<Bookings />} />
+		</Routes>
 	</ContentWrapper>
 }
 
