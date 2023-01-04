@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { ContentWrapper, MiniHeader, SpeedDialButton } from '../common'
+import { Link } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import MoviesModel from '../../model/movies.js'
 import { VisibilityOff } from '@styled-icons/material-rounded/VisibilityOff'
@@ -76,7 +77,7 @@ const CurrentMovieList = styled.div`
     /* background-color: #db0000; */
 `;
 
-const CurrentMovie = styled.div`
+const CurrentMovie = styled(Link)`
     height: 350px;
     width: 230px;    
     margin: 1rem 2rem;
@@ -92,6 +93,7 @@ const CurrentMovie = styled.div`
     &:hover {
         width: 300px;
         margin: 1rem .1rem;
+        cursor: pointer;
     }
 
     img {
@@ -225,6 +227,7 @@ export default function Movies(props) {
                     {movies?.map((movie, index) => {
                         return <CurrentMovie
                             key={index}
+                            to={`${movie._id}`}
                         >
                             <img src={movie.movie_picture_URL} alt="movie Poster" />
                             <MovieActionWrapper>

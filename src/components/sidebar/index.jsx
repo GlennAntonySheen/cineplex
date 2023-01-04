@@ -8,7 +8,7 @@ import { ProjectionScreen } from '@styled-icons/fluentui-system-regular/Projecti
 
 const SidebarWrapper = styled.div`
     height: calc(100vh - 2rem);
-    width: 300px;
+    width: 250px;
     /* position: fixed; */
     display: grid;
     grid-template: auto auto auto / 1fr;
@@ -30,7 +30,7 @@ const NavHeader = styled.h1`
     background-color: #EDEDED;
 `;
 
-const LinksContainer = styled.ul`
+const LinksContainer = styled.div`
     height: auto;
     padding: .5rem;
     display: grid;
@@ -45,6 +45,7 @@ const Links = styled(Link)`
     grid-gap: .4rem;
     align-content: center;
     border-radius: .6rem;
+    text-decoration: none;
     /* grid-template: 1fr / auto 1fr; */
     transition: .5s;
     color: #EDEDED;
@@ -62,6 +63,7 @@ const Links = styled(Link)`
         display: inline-flex;
         align-items: center;
         font-size: 1.2rem;
+
     }
 
 
@@ -77,19 +79,19 @@ export default function Sidebar(props) {
     return <SidebarWrapper>
         <NavHeader>{`${props.currentPage}`}</NavHeader>
         <LinksContainer>
-            <Links to={`movies`} active={props.currentPage == 'Movies'} onClick={() => props.setCurrentPage('Movies')} >
+            <Links to={`movies`} onClick={() => props.setCurrentPage('Movies')} >
                 <MoviesAndTv size="30" />
                 <span>Movies</span>
             </Links> 
-            <Links to={'screens'} active={props.currentPage == 'Screens'} onClick={() => props.setCurrentPage('Screens')} >
+            <Links to={'screens'} onClick={() => props.setCurrentPage('Screens')} >
                 <ProjectionScreen size="30" />
                 <span>Screens</span>
             </Links>
-            <Links to={'shows'} active={props.currentPage == 'shows'} onClick={() => props.setCurrentPage('Shows')} >
+            <Links to={'shows'} onClick={() => props.setCurrentPage('Shows')} >
                 <Slideshow size="30" />
                 <span>Shows</span>
             </Links>
-            <Links to={'booking'} active={props.currentPage == 'Booking'} onClick={() => props.setCurrentPage('Booking')} >
+            <Links to={'booking'} onClick={() => props.setCurrentPage('Booking')} >
                 <Ticket size="30" />
                 <span>Booking</span>
             </Links>
